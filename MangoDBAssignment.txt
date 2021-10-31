@@ -1,0 +1,223 @@
+use users
+switched to db users
+> db.createCollection('user')
+{ "ok" : 1 }
+1:Query Description:Write a query to add users to our database. Username while adding a new user should be unique.
+Query:
+> db.user.insertMany([
+        {   "firstName":"John",
+           "lastName":"Hutch",
+           "password":"Ennime45x",
+           "calories_per_day":180,
+           "phone":"9188776655",
+            "email":"john224@gmail.com",
+            "username":"john"   },
+
+         db.user.insert({  "firstName":"Bhaveshs",
+           "lastName":"Jac",
+           "password":"6me45x",
+           "calories_per_day":190,
+           "phone":"9188976655",
+            "email":"cynder22@gmail.com",
+            "username":"bhaveshs"   }),
+
+          { "firstName":"Henry",
+           "lastName":"Ben",
+           "password":"Ennime45x",
+           "calories_per_day":280,
+           "phone":"9176776655",
+            "email":"ben224@gmail.com",
+            "username":"ben"   },
+    
+           {  "firstName":"Aria",
+           "lastName":"Dench",
+           "password":"uyime45x",
+           "calories_per_day":980,
+           "phone":"9188706655",
+            "email":"dench224@gmail.com",
+            "username":"aria"   },
+    
+          {  "firstName":"Sam",
+           "lastName":"Alex",
+           "password":"adlme45x",
+           "calories_per_day":780,
+           "phone":"9188776695",
+            "email":"alex224@gmail.com",
+            "username":"alex"   }
+    
+            ])
+  Response:
+            {
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("60a7d1364e273c81bb079a07"),
+                ObjectId("60a7d1364e273c81bb079a08"),
+                ObjectId("60a7d1364e273c81bb079a09"),
+                ObjectId("60a7d1364e273c81bb079a0a"),
+                ObjectId("60a7d1364e273c81bb079a0b")
+        ]
+}
+
+
+
+2.Query Description:Write a query to delete user from our database based on the username (bhaveshs).
+Query:
+db.user.remove(
+    {
+        "name":"bhaveshs"
+         }
+)
+Response:
+Query Description:WriteResult({ "nRemoved" : 1 })
+
+3.Query Description:Write a query to update user fields like password, caloriesper_day, phone based on username(_bhaveshs).
+Query:
+
+db.user.update({"username":"bhaveshs"},
+    {$set:
+    {"password":"abnmsQ12",
+    "calories_per_day":2000,
+    "phone":"9987865434"}    
+    })
+Response:
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+Meal Document:
+
+db.meals.insertMany([
+    {
+    "datetime":"2020-12-20T15:20:00Z", 
+   "food_name":"pizza", 
+   "calorie":500, 
+   "description":"Chicken Wrapped Pizza",
+   "_id":"123", 
+   "username": "bhaveshs" 
+    },
+     {
+    "datetime":"2020-12-20T15:20:40Z", 
+   "food_name":"Burger", 
+   "calorie":5000, 
+   "description":"Saucy Burger",
+   "_id":"12", 
+   "username": "bhaveshs" 
+    },
+     {
+    "datetime":"2020-9-21T15:22:00Z", 
+   "food_name":"Maggie", 
+   "calorie":300, 
+   "description":"Masala yet Spicy Maggie",
+   "_id":"15", 
+   "username": "jhony" 
+    },
+     {
+    "datetime":"2020-12-27T15:20:20Z", 
+   "food_name":"Chicken Nuggets", 
+   "calorie":4000, 
+   "description":"Crunchy Nuggets",
+   "_id":"20", 
+   "username": "mickey" 
+    },
+     {
+    "datetime":"2020-11-10T16:20:00Z", 
+   "food_name":"French Fries", 
+   "calorie":250, 
+   "description":"Tasty & Fluffy Fries",
+   "_id":"22", 
+   "username": "mickey" 
+    }
+    ])
+
+4.Query Description:Write a query to add a meal for a specific user based on the username (bhaveshs). 
+Meal should have information as Query Description:Writecribed in the meal object above.
+Query:
+
+db.user.aggregate({
+            $lookup:
+            { from:"meals",
+              localfield:"username",
+              foreignfield:"username",
+              as:"added_entries"
+            }
+})
+
+5.Query Description:Write a query to delete meal based on _id (123).
+Query:
+db.meals.remove({"_id":"123"})
+
+Response:
+WriteResult({ "nRemoved" : 1 }) 
+
+
+6.Query Description:Write a query to delete all meals for a specific user as identified by the username (bhaveshs).
+Query:
+
+db.meal.deleteMany({"username":"bhaveshs"})
+
+Response:
+{ "acknowledged" : true, "deletedCount" : 2 }
+
+7.Query Description:Write a query to list all meals for a specific user (bhaveshs).
+Query:
+db.meals.find({"username":"bhaveshs"}).pretty()
+Response:
+{
+        "_id" : "123",
+        "datetime" : "2020-12-20T15:20:00Z",
+        "food_name" : "pizza",
+        "calorie" : 500,
+        "Query Description:Writecription" : "Chicken Wrapped Pizza",
+        "username" : "bhaveshs"
+}
+{
+        "_id" : "12",
+        "datetime" : "2020-12-20T15:20:40Z",
+        "food_name" : "Burger",
+        "calorie" : 5000,
+        "Query Description:Writecription" : "Saucy Burger",
+        "username" : "bhaveshs"
+}
+
+8.Query Description:Write a query to list all meals for a specific user (bhaveshs), on a given date (2020-12-20) , ordered by time.
+  Query:
+  db.meals.find({"username":"bhaveshs"}).sort({datetime:1})
+  Response:
+
+  {
+        "_id" : "123",
+        "datetime" : "2020-12-20T15:20:00Z",
+        "food_name" : "pizza",
+        "calorie" : 500,
+        "Query Description:Writecription" : "Chicken Wrapped Pizza",
+        "username" : "bhaveshs"
+}
+{
+        "_id" : "12",
+        "datetime" : "2020-12-20T15:20:40Z",
+        "food_name" : "Burger",
+        "calorie" : 5000,
+        "Query Description:Writecription" : "Saucy Burger",
+        "username" : "bhaveshs"
+}
+
+9.Query Description:Write a query which for a specific user (bhaveshs) for a specific date (2020-12-20),
+returns true if he has exceeded his daily limit and false otherwise
+ (i.e true if sum of calories of all meals on that day > calories_per_day).
+
+ Query:
+
+ db.meals.aggregate([
+             {$match:{
+                 username:"bhaveshs",
+             }
+             },  
+  
+             {$group:{
+                   _id:"$username",                   
+                    calorie_sum:{$sum:"$calorie"}
+                   }
+
+               
+           }]).find({calorie_sum:{$gt:"calorie"},"calorie":true})
+           
+
+
